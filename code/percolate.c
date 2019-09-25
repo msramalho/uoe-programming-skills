@@ -4,18 +4,33 @@
 #include "lib/arralloc.h"
 #include "lib/uni.h"
 #include "percolate.h"
+/**
+ * @brief generates a square grid of given size filled with default value
+ * 
+ * @param size the length of each dimension of the grid, #rows = #columns
+ * @param defaultValue the value to insert in each cell in the matrix
+ * @return int** to the grid
+ */
+int **generateSquareGrid(int size, int defaultValue) {
+	int** grid = (int **)arralloc(sizeof(int), 2, size, size);
+    for (int i = 0; i < size; i++) {
+		for (int j = 0; j < size; j++) {
+			grid[i][j] = defaultValue;
+		}
+	}
+    return grid;
+}
 
 int main(void) {
 	int L;
-	int **map;
 	float rho;
 	int seed;
 	int MAX;
 	char *datafile;
 	char *percfile;
+	int **map = generateSquareGrid(L + 2, 0);
 
 	L = 20;
-	map = (int **)arralloc(sizeof(int), 2, L + 2, L + 2);
 	rho = 0.40;
 	seed = 1564;
 	datafile = "map.dat";
@@ -29,11 +44,6 @@ int main(void) {
 	int nfill;
 	int i, j;
 	float r;
-	for (i = 0; i < L + 2; i++) {
-		for (j = 0; j < L + 2; j++) {
-			map[i][j] = 0;
-		}
-	}
 	nfill = 0;
 	for (i = 1; i <= L; i++) {
 		for (j = 1; j <= L; j++) {
