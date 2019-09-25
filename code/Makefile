@@ -1,5 +1,7 @@
 CC=gcc
 
+.SILENT: clean realclean
+
 all: percolate.o uni.o arralloc.o
 	$(CC) -g arralloc.o uni.o percolate.o -lm -o percolate.out
 
@@ -11,3 +13,8 @@ uni.o : lib/uni.c lib/uni.h
 
 arralloc.o : lib/arralloc.c lib/arralloc.h
 	$(CC)  -g -c lib/arralloc.c
+		
+realclean: clean
+	rm -f *.dat *.pgm
+clean :
+	rm -f *.o *.out
