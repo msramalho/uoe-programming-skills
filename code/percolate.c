@@ -1,8 +1,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#include "arralloc.h"
-#include "uni.h"
+#include "lib/arralloc.h"
+#include "lib/uni.h"
 #include "percolate.h"
 
 int main(void)
