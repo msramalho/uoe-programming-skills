@@ -81,12 +81,6 @@ int main(void) {
 		loop++;
 	}
 
-	for (j = L; j >= 1; j--) {
-		for (i = 1; i <= L; i++) {
-			map[i][j] = (map[i][j] * 1) + 0;
-		}
-	}
-
 	int itop, ibot, percclusternum;
 	int percs = 0;
 	percclusternum = 0;
