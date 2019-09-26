@@ -117,7 +117,7 @@ int main(int argc, char *argv[]) {
 	int nEmpty = fillGridRandomly(map, opt);
 
 	// print real vs expected density
-	printf("rho = %f, actual density = %f\n", opt.rho, 1 - ((double)nEmpty) / ((double)opt.size * opt.size));
+	printf("rho = %f, actual density = %f\n", opt.rho, 1 - nEmpty / (double)MAX);
 
 	int loop, nchange, old;
 	loop = 1;
