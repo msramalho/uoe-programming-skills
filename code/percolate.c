@@ -8,8 +8,7 @@
 #include "percolate.h"
 
 // Using macros for increased readability
-#define EMPTY 0
-#define FULL -1
+#define FULL 0
 
 struct cluster {
 	int id;
@@ -120,7 +119,7 @@ int main(int argc, char *argv[]) {
 		nchange = 0;
 		for (int i = 1; i <= opt.size; i++) {
 			for (int j = 1; j <= opt.size; j++) {
-				if (map[i][j] != 0) {
+				if (map[i][j] != FULL) {
 					old = map[i][j];
 					if (map[i - 1][j] > map[i][j]) map[i][j] = map[i - 1][j];
 					if (map[i + 1][j] > map[i][j]) map[i][j] = map[i + 1][j];
@@ -182,7 +181,7 @@ int main(int argc, char *argv[]) {
 	}
 	for (int i = 1; i <= opt.size; i++) {
 		for (int j = 1; j <= opt.size; j++) {
-			if (map[i][j] != 0) {
+			if (map[i][j] != FULL) {
 				++(clustlist[map[i][j] - 1].size);
 			}
 		}
@@ -219,7 +218,7 @@ int main(int argc, char *argv[]) {
 	for (int j = opt.size; j >= 1; j--) {
 		for (int i = 1; i <= opt.size; i++) {
 			colour = map[i][j];
-			if (map[i][j] > 0) {
+			if (map[i][j] > 0) { // TODO: update to != FULL?
 				colour = rank[map[i][j] - 1];
 				if (colour >= MAX) {
 					colour = MAX;
