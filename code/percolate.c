@@ -77,41 +77,35 @@ options loadCmdOptions(int argc, char *argv[]) {
 
 int main(int argc, char *argv[]) {
 	options opt = loadCmdOptions(argc, argv);
-
-	int size = 20;
-	float rho = 0.4;
-	int seed = 1564;
-	int MAX = size * size;
-	char *datafile = "map.dat";
-	char *percfile = "map.pgm";
-	int **map = generateSquareGrid(size + 2, 0);
-
-	MAX = size * size;
-
-	rinit(seed);
-
 	printf("Parameters are rho=%f, size=%d, seed=%d, data=%s, perc=%s\n", opt.rho, opt.size, opt.seed, opt.dataFile, opt.percFile);
+
+	int MAX = opt.size * opt.size;
+
+	int **map = generateSquareGrid(opt.size + 2, 0);
+
+	rinit(opt.seed);
+
 
 	int nfill;
 	int i, j;
 	float r;
 	nfill = 0;
-	for (i = 1; i <= size; i++) {
-		for (j = 1; j <= size; j++) {
+	for (i = 1; i <= opt.size; i++) {
+		for (j = 1; j <= opt.size; j++) {
 			r = random_uniform();
-			if (r > rho) {
+			if (r > opt.rho) {
 				nfill++;
 				map[i][j] = 1;
 			}
 		}
 	}
-	printf("rho = %f, actual density = %f\n", rho,
-	       1.0 - ((double)nfill) / ((double)size * size));
+	printf("rho = %f, actual density = %f\n", opt.rho,
+	       1.0 - ((double)nfill) / ((double)opt.size * opt.size));
 
 	/* Fix bug. */
 	nfill = 0;
-	for (i = 1; i <= size; i++) {
-		for (j = 1; j <= size; j++) {
+	for (i = 1; i <= opt.size; i++) {
+		for (j = 1; j <= opt.size; j++) {
 			if (map[i][j] != 0) {
 				nfill++;
 				map[i][j] = nfill;
@@ -124,8 +118,8 @@ int main(int argc, char *argv[]) {
 	nchange = 1;
 	while (nchange > 0) {
 		nchange = 0;
-		for (i = 1; i <= size; i++) {
-			for (j = 1; j <= size; j++) {
+		for (i = 1; i <= opt.size; i++) {
+			for (j = 1; j <= opt.size; j++) {
 				if (map[i][j] != 0) {
 					old = map[i][j];
 					if (map[i - 1][j] > map[i][j]) map[i][j] = map[i - 1][j];
@@ -145,12 +139,12 @@ int main(int argc, char *argv[]) {
 	int itop, ibot, percclusternum;
 	int percs = 0;
 	percclusternum = 0;
-	for (itop = 1; itop <= size; itop++) {
-		if (map[itop][size] > 0) {
-			for (ibot = 1; ibot <= size; ibot++) {
-				if (map[itop][size] == map[ibot][1]) {
+	for (itop = 1; itop <= opt.size; itop++) {
+		if (map[itop][opt.size] > 0) {
+			for (ibot = 1; ibot <= opt.size; ibot++) {
+				if (map[itop][opt.size] == map[ibot][1]) {
 					percs = 1;
-					percclusternum = map[itop][size];
+					percclusternum = map[itop][opt.size];
 				}
 			}
 		}
@@ -161,12 +155,12 @@ int main(int argc, char *argv[]) {
 		printf("Cluster DOES NOT percolate\n");
 	}
 
-	printf("Opening file <%s>\n", datafile);
+	printf("Opening file <%s>\n", opt.dataFile);
 	FILE *fp;
-	fp = fopen(datafile, "w");
+	fp = fopen(opt.dataFile, "w");
 	printf("Writing data ...\n");
-	for (j = size; j >= 1; j--) {
-		for (i = 1; i <= size; i++) {
+	for (j = opt.size; j >= 1; j--) {
+		for (i = 1; i <= opt.size; i++) {
 			fprintf(fp, " %4d", map[i][j]);
 		}
 		fprintf(fp, "\n");
@@ -179,23 +173,23 @@ int main(int argc, char *argv[]) {
 	struct cluster *clustlist;
 	int colour;
 	int *rank;
-	clustlist = (struct cluster *)arralloc(sizeof(struct cluster), 1, size * size);
-	rank = (int *)arralloc(sizeof(int), 1, size * size);
-	for (i = 0; i < size * size; i++) {
+	clustlist = (struct cluster *)arralloc(sizeof(struct cluster), 1, opt.size * opt.size);
+	rank = (int *)arralloc(sizeof(int), 1, opt.size * opt.size);
+	for (i = 0; i < opt.size * opt.size; i++) {
 		rank[i] = -1;
 		clustlist[i].size = 0;
 		clustlist[i].id = i + 1;
 	}
-	for (i = 1; i <= size; i++) {
-		for (j = 1; j <= size; j++) {
+	for (i = 1; i <= opt.size; i++) {
+		for (j = 1; j <= opt.size; j++) {
 			if (map[i][j] != 0) {
 				++(clustlist[map[i][j] - 1].size);
 			}
 		}
 	}
-	percsort(clustlist, size * size);
+	percsort(clustlist, opt.size * opt.size);
 	maxsize = clustlist[0].size;
-	for (ncluster = 0; ncluster < size * size && clustlist[ncluster].size > 0;
+	for (ncluster = 0; ncluster < opt.size * opt.size && clustlist[ncluster].size > 0;
 	     ncluster++)
 		;
 	if (MAX > ncluster) {
@@ -204,8 +198,8 @@ int main(int argc, char *argv[]) {
 	for (i = 0; i < ncluster; i++) {
 		rank[clustlist[i].id - 1] = i;
 	}
-	printf("Opening file <%s>\n", percfile);
-	fp = fopen(percfile, "w");
+	printf("Opening file <%s>\n", opt.percFile);
+	fp = fopen(opt.percFile, "w");
 	printf("Map has %d clusters, maximum cluster size is %d\n", ncluster,
 	       maxsize);
 	if (MAX == 1) {
@@ -218,12 +212,12 @@ int main(int argc, char *argv[]) {
 	printf("Writing data ...\n");
 	fprintf(fp, "P2\n");
 	if (MAX > 0) {
-		fprintf(fp, "%d %d\n%d\n", size, size, MAX);
+		fprintf(fp, "%d %d\n%d\n", opt.size, opt.size, MAX);
 	} else {
-		fprintf(fp, "%d %d\n%d\n", size, size, 1);
+		fprintf(fp, "%d %d\n%d\n", opt.size, opt.size, 1);
 	}
-	for (j = size; j >= 1; j--) {
-		for (i = 1; i <= size; i++) {
+	for (j = opt.size; j >= 1; j--) {
+		for (i = 1; i <= opt.size; i++) {
 			colour = map[i][j];
 			if (map[i][j] > 0) {
 				colour = rank[map[i][j] - 1];
