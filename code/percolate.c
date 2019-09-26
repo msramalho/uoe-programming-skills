@@ -150,8 +150,8 @@ int main(int argc, char *argv[]) {
 	FILE *fp;
 	fp = fopen(opt.dataFile, "w");
 	printf("Writing data ...\n");
-	for (j = opt.size; j >= 1; j--) {
-		for (i = 1; i <= opt.size; i++) {
+	for (int j = opt.size; j >= 1; j--) {
+		for (int i = 1; i <= opt.size; i++) {
 			fprintf(fp, " %4d", map[i][j]);
 		}
 		fprintf(fp, "\n");
@@ -166,13 +166,13 @@ int main(int argc, char *argv[]) {
 	int *rank;
 	clustlist = (struct cluster *)arralloc(sizeof(struct cluster), 1, opt.size * opt.size);
 	rank = (int *)arralloc(sizeof(int), 1, opt.size * opt.size);
-	for (i = 0; i < opt.size * opt.size; i++) {
+	for (int i = 0; i < opt.size * opt.size; i++) {
 		rank[i] = -1;
 		clustlist[i].size = 0;
 		clustlist[i].id = i + 1;
 	}
-	for (i = 1; i <= opt.size; i++) {
-		for (j = 1; j <= opt.size; j++) {
+	for (int i = 1; i <= opt.size; i++) {
+		for (int j = 1; j <= opt.size; j++) {
 			if (map[i][j] != 0) {
 				++(clustlist[map[i][j] - 1].size);
 			}
@@ -186,7 +186,7 @@ int main(int argc, char *argv[]) {
 	if (MAX > ncluster) {
 		MAX = ncluster;
 	}
-	for (i = 0; i < ncluster; i++) {
+	for (int i = 0; i < ncluster; i++) {
 		rank[clustlist[i].id - 1] = i;
 	}
 	printf("Opening file <%s>\n", opt.percFile);
@@ -207,8 +207,8 @@ int main(int argc, char *argv[]) {
 	} else {
 		fprintf(fp, "%d %d\n%d\n", opt.size, opt.size, 1);
 	}
-	for (j = opt.size; j >= 1; j--) {
-		for (i = 1; i <= opt.size; i++) {
+	for (int j = opt.size; j >= 1; j--) {
+		for (int i = 1; i <= opt.size; i++) {
 			colour = map[i][j];
 			if (map[i][j] > 0) {
 				colour = rank[map[i][j] - 1];
