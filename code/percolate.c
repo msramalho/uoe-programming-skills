@@ -4,6 +4,11 @@
 #include "lib/arralloc.h"
 #include "lib/uni.h"
 #include "percolate.h"
+
+struct cluster {
+	int id;
+	int size;
+};
 /**
  * @brief generates a square grid of given size filled with default value
  * 

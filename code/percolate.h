@@ -1,7 +1,3 @@
-struct cluster
-{
-  int id;
-  int size;
-};
+struct cluster;
 
 void percsort(struct cluster *list, int n);
