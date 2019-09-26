@@ -80,6 +80,28 @@ options loadCmdOptions(int argc, char *argv[]) {
 	return opt;
 }
 
+/**
+ * @brief Randomly fills the grid with the specified density and also inserts 
+ * the single-cell incremental ids
+ * 
+ * @param map the 2x2 grid
+ * @param opt the options struct that should have size and rho
+ * @return int the number of empty cells left
+ */
+int fillGridRandomly(int **map, options opt) {
+	int nEmpty = 0;
+	for (int i = 1; i <= opt.size; i++) {
+		for (int j = 1; j <= opt.size; j++) {
+			if (random_uniform() <= opt.rho) {
+				map[i][j] = FULL;  // mark as filled cell
+			} else {
+				map[i][j] = ++nEmpty;  // add increasing int values starting at 1
+			}
+		}
+	}
+	return nEmpty;
+}
+
 int main(int argc, char *argv[]) {
 	options opt = loadCmdOptions(argc, argv);
 	printf("Parameters are rho=%f, size=%d, seed=%d, data=%s, perc=%s\n", opt.rho, opt.size, opt.seed, opt.dataFile, opt.percFile);
@@ -88,19 +110,12 @@ int main(int argc, char *argv[]) {
 	rinit(opt.seed);
 	int MAX = opt.size * opt.size;
 
-	// TODO: stopped here, trying to figure out if filled cells are 0, and empty should be -1
+	// generate the grid in an empty state
 	int **map = generateSquareGrid(opt.size, EMPTY);
+
 	// Randomly fill the grid
-	int nEmpty = 0;
-	for (int i = 1; i <= opt.size; i++) {
-		for (int j = 1; j <= opt.size; j++) {
-			if (random_uniform() <= opt.rho) {
-				map[i][j] = FULL;
-			}else{
-				map[i][j] = ++nEmpty; // add increasing int values starting at 1
-			}
-		}
-	}
+	int nEmpty = fillGridRandomly(map, opt);
+
 	// print real vs expected density
 	printf("rho = %f, actual density = %f\n", opt.rho, 1 - ((double)nEmpty) / ((double)opt.size * opt.size));
 
