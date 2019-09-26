@@ -7,6 +7,10 @@
 #include "lib/uni.h"
 #include "percolate.h"
 
+// Using macros for increased readability
+#define EMPTY 0
+#define FULL -1
+
 struct cluster {
 	int id;
 	int size;
@@ -14,15 +18,16 @@ struct cluster {
 
 /**
  * @brief generates a square grid of given size filled with default value
+ * the 2 extra rows and columns are added implicitly by this function
  * 
  * @param size the length of each dimension of the grid, #rows = #columns
  * @param defaultValue the value to insert in each cell in the matrix
  * @return int** to the grid
  */
 int **generateSquareGrid(int size, int defaultValue) {
-	int **grid = (int **)arralloc(sizeof(int), 2, size, size);
-	for (int i = 0; i < size; i++) {
-		for (int j = 0; j < size; j++) {
+	int **grid = (int **)arralloc(sizeof(int), 2, size + 2, size + 2);
+	for (int i = 0; i < size + 2; i++) {
+		for (int j = 0; j < size + 2; j++) {
 			grid[i][j] = defaultValue;
 		}
 	}
@@ -79,45 +84,33 @@ int main(int argc, char *argv[]) {
 	options opt = loadCmdOptions(argc, argv);
 	printf("Parameters are rho=%f, size=%d, seed=%d, data=%s, perc=%s\n", opt.rho, opt.size, opt.seed, opt.dataFile, opt.percFile);
 
+	// seed the random number generator
+	rinit(opt.seed);
 	int MAX = opt.size * opt.size;
 
-	int **map = generateSquareGrid(opt.size + 2, 0);
-
-	rinit(opt.seed);
-
-
-	int nfill;
-	int i, j;
-	nfill = 0;
-	for (i = 1; i <= opt.size; i++) {
-		for (j = 1; j <= opt.size; j++) {
-			if (random_uniform() > opt.rho) {
-				nfill++;
-				map[i][j] = 1;
+	// TODO: stopped here, trying to figure out if filled cells are 0, and empty should be -1
+	int **map = generateSquareGrid(opt.size, EMPTY);
+	// Randomly fill the grid
+	int nEmpty = 0;
+	for (int i = 1; i <= opt.size; i++) {
+		for (int j = 1; j <= opt.size; j++) {
+			if (random_uniform() <= opt.rho) {
+				map[i][j] = FULL;
+			}else{
+				map[i][j] = ++nEmpty; // add increasing int values starting at 1
 			}
 		}
 	}
-	printf("rho = %f, actual density = %f\n", opt.rho,
-	       1.0 - ((double)nfill) / ((double)opt.size * opt.size));
-
-	/* Fix bug. */
-	nfill = 0;
-	for (i = 1; i <= opt.size; i++) {
-		for (j = 1; j <= opt.size; j++) {
-			if (map[i][j] != 0) {
-				nfill++;
-				map[i][j] = nfill;
-			}
-		}
-	}
+	// print real vs expected density
+	printf("rho = %f, actual density = %f\n", opt.rho, 1 - ((double)nEmpty) / ((double)opt.size * opt.size));
 
 	int loop, nchange, old;
 	loop = 1;
 	nchange = 1;
 	while (nchange > 0) {
 		nchange = 0;
-		for (i = 1; i <= opt.size; i++) {
-			for (j = 1; j <= opt.size; j++) {
+		for (int i = 1; i <= opt.size; i++) {
+			for (int j = 1; j <= opt.size; j++) {
 				if (map[i][j] != 0) {
 					old = map[i][j];
 					if (map[i - 1][j] > map[i][j]) map[i][j] = map[i - 1][j];
