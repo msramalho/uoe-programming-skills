@@ -88,12 +88,10 @@ int main(int argc, char *argv[]) {
 
 	int nfill;
 	int i, j;
-	float r;
 	nfill = 0;
 	for (i = 1; i <= opt.size; i++) {
 		for (j = 1; j <= opt.size; j++) {
-			r = random_uniform();
-			if (r > opt.rho) {
+			if (random_uniform() > opt.rho) {
 				nfill++;
 				map[i][j] = 1;
 			}
