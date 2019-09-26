@@ -1,6 +1,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+#include "getopt.h"
+
 #include "lib/arralloc.h"
 #include "lib/uni.h"
 #include "percolate.h"
@@ -9,6 +11,7 @@ struct cluster {
 	int id;
 	int size;
 };
+
 /**
  * @brief generates a square grid of given size filled with default value
  * 
@@ -17,34 +20,77 @@ struct cluster {
  * @return int** to the grid
  */
 int **generateSquareGrid(int size, int defaultValue) {
-	int** grid = (int **)arralloc(sizeof(int), 2, size, size);
-    for (int i = 0; i < size; i++) {
+	int **grid = (int **)arralloc(sizeof(int), 2, size, size);
+	for (int i = 0; i < size; i++) {
 		for (int j = 0; j < size; j++) {
 			grid[i][j] = defaultValue;
 		}
 	}
-    return grid;
+	return grid;
 }
 
-int main(void) {
+typedef struct {
 	int size;
-	float rho;
 	int seed;
-	int MAX;
-	char *datafile;
-	char *percfile;
+	float rho;
+	char *dataFile;
+	char *percFile;
+} options;
+
+/**
+ * @brief uses getopt to parse the command line arguments to fill the @options struct
+ * 
+ * @param argc as originated from int main()
+ * @param argv as originated from int main()
+ * @return options a struct with either the default or user-specified values, if the last are present
+ */
+options loadCmdOptions(int argc, char *argv[]) {
+	options opt = {.size = 20, .seed = 1564, .rho = 0.4, .dataFile = "map.dat", .percFile = "map.pgm"};
+	int o;
+	while ((o = getopt(argc, argv, "g:s:r:d:p:")) != -1) {
+		switch (o) {
+			case 'g':
+				sscanf(optarg, "%d", &opt.size);
+				break;
+			case 's':
+				sscanf(optarg, "%d", &opt.seed);
+				break;
+			case 'r':
+				sscanf(optarg, "%f", &opt.rho);
+				break;
+			case 'd':
+				opt.dataFile = optarg;
+				break;
+			case 'p':
+				opt.percFile = optarg;
+				break;
+			case ':':
+				printf("Option %c needs a value\n", optopt);
+				break;
+			case '?':
+				printf("Unknown option: %c\n", optopt);
+				break;
+		}
+	}
+	return opt;
+}
+
+int main(int argc, char *argv[]) {
+	options opt = loadCmdOptions(argc, argv);
+
+	int size = 20;
+	float rho = 0.4;
+	int seed = 1564;
+	int MAX = size * size;
+	char *datafile = "map.dat";
+	char *percfile = "map.pgm";
 	int **map = generateSquareGrid(size + 2, 0);
 
-	size = 20;
-	rho = 0.40;
-	seed = 1564;
-	datafile = "map.dat";
-	percfile = "map.pgm";
 	MAX = size * size;
 
 	rinit(seed);
 
-	printf("Parameters are rho=%f, size=%d, seed=%d\n", rho, size, seed);
+	printf("Parameters are rho=%f, size=%d, seed=%d, data=%s, perc=%s\n", opt.rho, opt.size, opt.seed, opt.dataFile, opt.percFile);
 
 	int nfill;
 	int i, j;
