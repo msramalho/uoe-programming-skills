@@ -19,19 +19,13 @@ struct cluster {
 /**
  * @brief generates a square grid of given size filled with default value
  * the 2 extra rows and columns are added implicitly by this function
+ * cells are not initialized
  * 
  * @param size the length of each dimension of the grid, #rows = #columns
- * @param defaultValue the value to insert in each cell in the matrix
  * @return int** to the grid
  */
-int **generateSquareGrid(int size, int defaultValue) {
-	int **grid = (int **)arralloc(sizeof(int), 2, size + 2, size + 2);
-	for (int i = 0; i < size + 2; i++) {
-		for (int j = 0; j < size + 2; j++) {
-			grid[i][j] = defaultValue;
-		}
-	}
-	return grid;
+int **generateSquareGrid(int size) {
+	return (int **)arralloc(sizeof(int), 2, size + 2, size + 2);
 }
 
 typedef struct {
@@ -111,7 +105,7 @@ int main(int argc, char *argv[]) {
 	int MAX = opt.size * opt.size;
 
 	// generate the grid in an empty state
-	int **map = generateSquareGrid(opt.size, EMPTY);
+	int **map = generateSquareGrid(opt.size);
 
 	// Randomly fill the grid
 	int nEmpty = fillGridRandomly(map, opt);
