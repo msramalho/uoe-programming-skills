@@ -2,6 +2,7 @@
 #include <stdlib.h>
 
 #include "main.h"
+#include "getopt.h"
 
 /**
  * @brief uses getopt to parse the command line arguments to fill the @options struct
@@ -39,6 +40,29 @@ options loadCmdOptions(int argc, char *argv[]) {
 		}
 	}
 	return opt;
+}
+
+
+/**
+ * @brief writes the given 2x2 grid to a .dat file
+ * 
+ * @param map the 2x2 grid
+ * @param opt an options struct that should contain the map size
+ */
+void writeGridToDatFile(int **map, options opt) {
+	printf("Opening file <%s>\n", opt.dataFile);
+	FILE *fp;
+	fp = fopen(opt.dataFile, "w");
+	printf("Writing data ...\n");
+	for (int i = 1; i <= opt.size; i++) {
+		for (int j = 1; j <= opt.size; j++) {
+			fprintf(fp, " %4d", map[i][j]);
+		}
+		fprintf(fp, "\n");
+	}
+	printf("...done\n");
+	fclose(fp);
+	printf("File closed\n");
 }
 
 int main(int argc, char *argv[]) {

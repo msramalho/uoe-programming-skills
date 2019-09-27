@@ -37,6 +37,15 @@ int fillGridRandomly(int **map, options opt) {
 	return nEmpty;
 }
 
+/**
+ * @brief updates the value of the given cell to the max amongst its 4 neighbours
+ * 
+ * @param map the 2x2 grid
+ * @param i the line in the grid for the current cell
+ * @param j the column in the grid for the current cell
+ * @return true if the cell was the largest already
+ * @return false otherwise - its value was changed
+ */
 bool isMaxNeighbours(int **map, int i, int j) {
 	int m = max(map[i][j], map[i - 1][j]);  // up
 	m = max(m, map[i + 1][j]);              // down
@@ -88,20 +97,4 @@ int percolates(int **map, options opt) {
 		}
 	}
 	return 0;  // no percolation was found
-}
-
-void writeGridToDatFile(int **map, options opt) {
-	printf("Opening file <%s>\n", opt.dataFile);
-	FILE *fp;
-	fp = fopen(opt.dataFile, "w");
-	printf("Writing data ...\n");
-	for (int i = 1; i <= opt.size; i++) {
-		for (int j = 1; j <= opt.size; j++) {
-			fprintf(fp, " %4d", map[i][j]);
-		}
-		fprintf(fp, "\n");
-	}
-	printf("...done\n");
-	fclose(fp);
-	printf("File closed\n");
 }
