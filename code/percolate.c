@@ -128,7 +128,7 @@ int main(int argc, char *argv[]) {
 	printf("rho = %f, actual density = %f\n", opt.rho, 1 - nEmpty / (double)MAX);
 
 	// make every cell converge on their cluster number
-	int loop = 1, nchange;
+	int loop = 1, nchange = 1;
 	while (nchange > 0) {
 		nchange = 0;
 		for (int i = 1; i <= opt.size; i++) {
