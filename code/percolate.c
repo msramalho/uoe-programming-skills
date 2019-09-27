@@ -200,12 +200,9 @@ int main(int argc, char *argv[]) {
 	writeGridToDatFile(map, opt);
 
 	// generate a hashmap of cluster ID -> size
-	int ncluster, maxsize;
-	struct cluster *clustlist;
-	int colour;
-	int *rank;
-	clustlist = (struct cluster *)arralloc(sizeof(struct cluster), 1, opt.size * opt.size);
-	rank = (int *)arralloc(sizeof(int), 1, MAX);
+	struct cluster *clustlist = (struct cluster *)arralloc(sizeof(struct cluster), 1, opt.size * opt.size);
+	int *rank  = (int *)arralloc(sizeof(int), 1, MAX);
+
 	for (int i = 0; i < MAX; i++) {
 		rank[i] = -1;
 		clustlist[i].size = 0;
@@ -222,6 +219,7 @@ int main(int argc, char *argv[]) {
 	// sort the clusters by size
 	percsort(clustlist, MAX);
 
+	int ncluster, maxsize;
 	// find out how many clusters are there??
 	maxsize = clustlist[0].size;
 	for (ncluster = 0; ncluster < MAX && clustlist[ncluster].size > 0; ncluster++)
@@ -249,6 +247,7 @@ int main(int argc, char *argv[]) {
 	fprintf(fp, "P2\n");
 	fprintf(fp, "%d %d\n%d\n", opt.size, opt.size, max(MAX, 1));
 
+	int colour;
 	for (int j = opt.size; j >= 1; j--) {
 		for (int i = 1; i <= opt.size; i++) {
 			colour = map[i][j];
