@@ -111,6 +111,29 @@ bool isMaxNeighbours(int **map, int i, int j) {
 }
 
 /**
+ * @brief make the grid intersecting clusters converge on the largest amongst them
+ * 
+ * @param map the 2x2 grid
+ * @param opt an options struct that should contain the map size
+ * @return the number of loops
+ */
+int convergeOnMaxCluster(int **map, options opt) {
+	int loop = 1, nchange = 1;
+	while (nchange > 0) {
+		nchange = 0;
+		for (int i = 1; i <= opt.size; i++) {
+			for (int j = 1; j <= opt.size; j++) {
+				// if this cell is not a wall and was not the max amongst the 4 neighbours
+				// increment the changes count
+				if (map[i][j] != FULL && !isMaxNeighbours(map, i, j)) nchange++;
+			}
+		}
+		printf("Number of changes on loop %d is %d\n", loop++, nchange);
+	}
+	return loop;
+}
+
+/**
  * @brief search the top and bottom parts of the 2x2 grid for the same cluster
  * 
  * @param map the 2x2 grid
@@ -148,16 +171,7 @@ int main(int argc, char *argv[]) {
 	printf("rho = %f, actual density = %f\n", opt.rho, 1 - nEmpty / (double)MAX);
 
 	// make every cell converge on their cluster number
-	int loop = 1, nchange = 1;
-	while (nchange > 0) {
-		nchange = 0;
-		for (int i = 1; i <= opt.size; i++) {
-			for (int j = 1; j <= opt.size; j++) {
-				if (map[i][j] != FULL && !isMaxNeighbours(map, i, j)) nchange++;
-			}
-		}
-		printf("Number of changes on loop %d is %d\n", loop++, nchange);
-	}
+	convergeOnMaxCluster(map, opt);
 
 	// test if there was a percolation in the cluster
 	int percClusetrNum = percolates(map, opt);
