@@ -98,6 +98,13 @@ int percolates(int **map, options opt) {
 	return 0;  // no percolation was found
 }
 
+/**
+ * @brief simple function to print whether the current gird percolates
+ * this is reflect on the value of percClusetrNum which comes from
+ * the execution of percolates
+ * 
+ * @param percClusetrNum 0 or the id of the first found cluster that percolates
+ */
 void printPercolationStatus(int percClusetrNum) {
 	if (percClusetrNum) {
 		printf("Cluster DOES percolate. Cluster number: %d\n", percClusetrNum);

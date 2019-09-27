@@ -81,14 +81,11 @@ void writeGridToDatFile(int **map, options opt) {
  * @return int exit code, 0 is normal execution
  */
 int main(int argc, char *argv[]) {
+	// read the CMD line arguments or load defaults
 	options opt = loadCmdOptions(argc, argv);
 
 	// seed the random number generator
 	rinit(opt.seed);
-
-	//helpful variable
-	// int MAX = opt.size * opt.size;
-
 
 	// initialize the grid variable with appropriate extra rows and columns
 	int **map = generateSquareGrid(opt.size);
@@ -108,6 +105,7 @@ int main(int argc, char *argv[]) {
 	// output grid to the .pgm file specified by the user
 	prepareAndWriteGridToPgmFile(map, opt);
 
+	//free the allocated memory
 	free(map);
 
 	return 0;
