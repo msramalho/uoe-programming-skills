@@ -1,3 +1,12 @@
-struct cluster;
+#include <stdbool.h>
 
-void percsort(struct cluster *list, int n);
+#include "lib/uni.h"
+#include "pgm.h"
+
+int **generateSquareGrid(int size);
+void fillGridRandomly(int **map, options opt);
+bool isMaxNeighbours(int **map, int i, int j);
+int convergeOnMaxCluster(int **map, options opt);
+int percolates(int **map, options opt);
+void writeGridToDatFile(int **map, options opt);
+void printPercolationStatus(int percClusetrNum);
