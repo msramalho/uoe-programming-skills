@@ -199,15 +199,17 @@ int main(int argc, char *argv[]) {
 	// output grid to the .dat file specified by the user
 	writeGridToDatFile(map, opt);
 
-	// generate a hashmap of cluster ID -> size
+	// prepare the output of the PGM file
 	struct cluster *clustlist = (struct cluster *)arralloc(sizeof(struct cluster), 1, opt.size * opt.size);
 	int *rank  = (int *)arralloc(sizeof(int), 1, MAX);
 
+	// initialize ranks to -1, and cluster ids with size 1
 	for (int i = 0; i < MAX; i++) {
 		rank[i] = -1;
 		clustlist[i].size = 0;
-		clustlist[i].id = i + 1;
+		clustlist[i].id = i;
 	}
+	// find the right size for each cluster
 	for (int i = 1; i <= opt.size; i++) {
 		for (int j = 1; j <= opt.size; j++) {
 			if (map[i][j] != FULL) {
@@ -216,19 +218,20 @@ int main(int argc, char *argv[]) {
 		}
 	}
 
-	// sort the clusters by size
+	// sort the clusters by decreasing size
 	percsort(clustlist, MAX);
 
 	int ncluster, maxsize;
-	// find out how many clusters are there??
 	maxsize = clustlist[0].size;
+	// get the number of non-empty clusters
 	for (ncluster = 0; ncluster < MAX && clustlist[ncluster].size > 0; ncluster++)
 		;
-	if (MAX > ncluster) {
-		MAX = ncluster;
-	}
+	
+	MAX = min(MAX, ncluster);
+
+	// update rank as a "hashmap" of clusterId -> 
 	for (int i = 0; i < ncluster; i++) {
-		rank[clustlist[i].id - 1] = i;
+		rank[clustlist[i].id] = i;
 	}
 
 	// write PGM data to file
