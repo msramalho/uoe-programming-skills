@@ -141,12 +141,12 @@ int main(int argc, char *argv[]) {
 
 	// test if there was a percolation in the cluster
 	int percclusternum = 0, percs = 0;
-	for (int itop = 1; itop <= opt.size; itop++) {
-		if (map[itop][opt.size] > 0) {
-			for (int ibot = 1; ibot <= opt.size; ibot++) {
-				if (map[itop][opt.size] == map[ibot][1]) {
+	for (int jtop = 1; jtop <= opt.size; jtop++) {
+		if (map[1][jtop] != FULL) {
+			for (int jbot = 1; jbot <= opt.size; jbot++) {
+				if (map[opt.size][jbot] == map[1][jtop]) {
 					percs = 1;
-					percclusternum = map[itop][opt.size];
+					percclusternum = map[opt.size][jbot];
 				}
 			}
 		}
