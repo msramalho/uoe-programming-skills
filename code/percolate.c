@@ -159,12 +159,13 @@ int main(int argc, char *argv[]) {
 		printf("Cluster DOES NOT percolate\n");
 	}
 
+	// output .dat file
 	printf("Opening file <%s>\n", opt.dataFile);
 	FILE *fp;
 	fp = fopen(opt.dataFile, "w");
 	printf("Writing data ...\n");
-	for (int j = opt.size; j >= 1; j--) {
-		for (int i = 1; i <= opt.size; i++) {
+	for (int i = 1; i <= opt.size; i++) {
+		for (int j = 1; j <= opt.size; j++) {
 			fprintf(fp, " %4d", map[i][j]);
 		}
 		fprintf(fp, "\n");
