@@ -110,6 +110,26 @@ bool isMaxNeighbours(int **map, int i, int j) {
 	return old == m;
 }
 
+/**
+ * @brief search the top and bottom parts of the 2x2 grid for the same cluster
+ * 
+ * @param map the 2x2 grid
+ * @param opt an options struct that should contain the map size
+ * @return 0 if no percolation was found or X where X is the number of the first percolation found 
+ */
+int percolates(int **map, options opt) {
+	for (int jtop = 1; jtop <= opt.size; jtop++) {
+		if (map[1][jtop] != FULL) {
+			for (int jbot = 1; jbot <= opt.size; jbot++) {
+				if (map[opt.size][jbot] == map[1][jtop]) {
+					return map[opt.size][jbot];  // percolation was found
+				}
+			}
+		}
+	}
+	return 0;  // no percolation was found
+}
+
 int main(int argc, char *argv[]) {
 	options opt = loadCmdOptions(argc, argv);
 	printf("Parameters are rho=%f, size=%d, seed=%d, data=%s, perc=%s\n", opt.rho, opt.size, opt.seed, opt.dataFile, opt.percFile);
@@ -140,19 +160,9 @@ int main(int argc, char *argv[]) {
 	}
 
 	// test if there was a percolation in the cluster
-	int percclusternum = 0, percs = 0;
-	for (int jtop = 1; jtop <= opt.size; jtop++) {
-		if (map[1][jtop] != FULL) {
-			for (int jbot = 1; jbot <= opt.size; jbot++) {
-				if (map[opt.size][jbot] == map[1][jtop]) {
-					percs = 1;
-					percclusternum = map[opt.size][jbot];
-				}
-			}
-		}
-	}
-	if (percs) {
-		printf("Cluster DOES percolate. Cluster number: %d\n", percclusternum);
+	int percClusetrNum = percolates(map, opt);
+	if (percClusetrNum) {
+		printf("Cluster DOES percolate. Cluster number: %d\n", percClusetrNum);
 	} else {
 		printf("Cluster DOES NOT percolate\n");
 	}
