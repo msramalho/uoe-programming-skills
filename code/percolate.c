@@ -98,6 +98,7 @@ int fillGridRandomly(int **map, options opt) {
 }
 
 int max(int a, int b) { return a > b ? a : b; }
+int min(int a, int b) { return a < b ? a : b; }
 
 bool isMaxNeighbours(int **map, int i, int j) {
 	int m = max(map[i][j], map[i - 1][j]);  // up
@@ -222,14 +223,12 @@ int main(int argc, char *argv[]) {
 	printf("Writing data ...\n");
 	fprintf(fp, "P2\n");
 	fprintf(fp, "%d %d\n%d\n", opt.size, opt.size, max(MAX, 1));
+
 	for (int j = opt.size; j >= 1; j--) {
 		for (int i = 1; i <= opt.size; i++) {
 			colour = map[i][j];
 			if (map[i][j] > 0) {  // TODO: update to != FULL?
-				colour = rank[map[i][j] - 1];
-				if (colour >= MAX) {
-					colour = MAX;
-				}
+				colour = min(rank[map[i][j] - 1], MAX);
 			} else {
 				colour = MAX;
 			}
