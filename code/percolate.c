@@ -188,14 +188,17 @@ int main(int argc, char *argv[]) {
 	for (int i = 1; i <= opt.size; i++) {
 		for (int j = 1; j <= opt.size; j++) {
 			if (map[i][j] != FULL) {
-				++(clustlist[map[i][j] - 1].size);
+				clustlist[map[i][j] - 1].size++;
 			}
 		}
 	}
+
+	// sort the clusters by size
 	percsort(clustlist, opt.size * opt.size);
+
+	// find out how many clusters are there??
 	maxsize = clustlist[0].size;
-	for (ncluster = 0; ncluster < opt.size * opt.size && clustlist[ncluster].size > 0;
-	     ncluster++)
+	for (ncluster = 0; ncluster < opt.size * opt.size && clustlist[ncluster].size > 0; ncluster++)
 		;
 	if (MAX > ncluster) {
 		MAX = ncluster;
@@ -203,10 +206,11 @@ int main(int argc, char *argv[]) {
 	for (int i = 0; i < ncluster; i++) {
 		rank[clustlist[i].id - 1] = i;
 	}
+
+	// write PGM data to file
 	printf("Opening file <%s>\n", opt.percFile);
 	fp = fopen(opt.percFile, "w");
-	printf("Map has %d clusters, maximum cluster size is %d\n", ncluster,
-	       maxsize);
+	printf("Map has %d clusters, maximum cluster size is %d\n", ncluster, maxsize);
 	if (MAX == 1) {
 		printf("Displaying the largest cluster\n");
 	} else if (MAX == ncluster) {
