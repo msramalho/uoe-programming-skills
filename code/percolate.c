@@ -17,7 +17,6 @@ struct cluster {
 	int size;
 };
 
-
 /**
  * @brief generates a square grid of given size filled with default value
  * the 2 extra rows and columns are added implicitly by this function
@@ -143,12 +142,10 @@ int main(int argc, char *argv[]) {
 	}
 
 	// test if there was a percolation in the cluster
-	int itop, ibot, percclusternum;
-	int percs = 0;
-	percclusternum = 0;
-	for (itop = 1; itop <= opt.size; itop++) {
+	int percclusternum = 0, percs = 0;
+	for (int itop = 1; itop <= opt.size; itop++) {
 		if (map[itop][opt.size] > 0) {
-			for (ibot = 1; ibot <= opt.size; ibot++) {
+			for (int ibot = 1; ibot <= opt.size; ibot++) {
 				if (map[itop][opt.size] == map[ibot][1]) {
 					percs = 1;
 					percclusternum = map[itop][opt.size];
@@ -226,7 +223,7 @@ int main(int argc, char *argv[]) {
 	for (int j = opt.size; j >= 1; j--) {
 		for (int i = 1; i <= opt.size; i++) {
 			colour = map[i][j];
-			if (map[i][j] > 0) { // TODO: update to != FULL?
+			if (map[i][j] > 0) {  // TODO: update to != FULL?
 				colour = rank[map[i][j] - 1];
 				if (colour >= MAX) {
 					colour = MAX;
