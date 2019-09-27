@@ -153,35 +153,7 @@ int percolates(int **map, options opt) {
 	return 0;  // no percolation was found
 }
 
-int main(int argc, char *argv[]) {
-	options opt = loadCmdOptions(argc, argv);
-	printf("Parameters are rho=%f, size=%d, seed=%d, data=%s, perc=%s\n", opt.rho, opt.size, opt.seed, opt.dataFile, opt.percFile);
-
-	// seed the random number generator
-	rinit(opt.seed);
-	int MAX = opt.size * opt.size;
-
-	// generate the grid in an empty state
-	int **map = generateSquareGrid(opt.size);
-
-	// Randomly fill the grid
-	int nEmpty = fillGridRandomly(map, opt);
-
-	// print real vs expected density
-	printf("rho = %f, actual density = %f\n", opt.rho, 1 - nEmpty / (double)MAX);
-
-	// make every cell converge on their cluster number
-	convergeOnMaxCluster(map, opt);
-
-	// test if there was a percolation in the cluster
-	int percClusetrNum = percolates(map, opt);
-	if (percClusetrNum) {
-		printf("Cluster DOES percolate. Cluster number: %d\n", percClusetrNum);
-	} else {
-		printf("Cluster DOES NOT percolate\n");
-	}
-
-	// output .dat file
+void writeGridToDatFile(int **map, options opt){
 	printf("Opening file <%s>\n", opt.dataFile);
 	FILE *fp;
 	fp = fopen(opt.dataFile, "w");
@@ -195,6 +167,37 @@ int main(int argc, char *argv[]) {
 	printf("...done\n");
 	fclose(fp);
 	printf("File closed\n");
+}
+
+int main(int argc, char *argv[]) {
+	options opt = loadCmdOptions(argc, argv);
+	printf("Parameters are rho=%f, size=%d, seed=%d, data=%s, perc=%s\n", opt.rho, opt.size, opt.seed, opt.dataFile, opt.percFile);
+
+	int MAX = opt.size * opt.size;
+
+	// seed the random number generator
+	rinit(opt.seed);
+
+	// generate the grid in an empty state
+	int **map = generateSquareGrid(opt.size);
+
+	// Randomly fill the grid and print real vs expected density
+	int nEmpty = fillGridRandomly(map, opt);
+	printf("rho = %f, actual density = %f\n", opt.rho, 1 - nEmpty / (double)MAX);
+
+	// make every cell converge on their cluster number
+	convergeOnMaxCluster(map, opt);
+
+	// test if there was a percolation in the cluster
+	int percClusetrNum = percolates(map, opt);
+	if (percClusetrNum) {
+		printf("Cluster DOES percolate. Cluster number: %d\n", percClusetrNum);
+	} else {
+		printf("Cluster DOES NOT percolate\n");
+	}
+
+	// output grid to the .dat file specified by the user
+	writeGridToDatFile(map, opt);
 
 	// generate a hashmap of cluster ID -> size
 	int ncluster, maxsize;
@@ -232,6 +235,7 @@ int main(int argc, char *argv[]) {
 
 	// write PGM data to file
 	printf("Opening file <%s>\n", opt.percFile);
+	FILE *fp;
 	fp = fopen(opt.percFile, "w");
 	printf("Map has %d clusters, maximum cluster size is %d\n", ncluster, maxsize);
 	if (MAX == 1) {
