@@ -5,6 +5,7 @@
 
 #include "lib/arralloc.h"
 #include "lib/uni.h"
+#include "utils.h"
 #include "percolate.h"
 
 // Using macros for increased readability
@@ -96,9 +97,6 @@ int fillGridRandomly(int **map, options opt) {
 	}
 	return nEmpty;
 }
-
-int max(int a, int b) { return a > b ? a : b; }
-int min(int a, int b) { return a < b ? a : b; }
 
 bool isMaxNeighbours(int **map, int i, int j) {
 	int m = max(map[i][j], map[i - 1][j]);  // up
@@ -197,9 +195,7 @@ void computeClusterSize(int **map, options opt, struct cluster *clusterList) {
 	// find the right size for each cluster
 	for (int i = 1; i <= opt.size; i++) {
 		for (int j = 1; j <= opt.size; j++) {
-			if (map[i][j] != FULL) {
-				clusterList[map[i][j] - 1].size++;
-			}
+			if (map[i][j] != FULL) clusterList[map[i][j] - 1].size++;
 		}
 	}
 }
@@ -266,7 +262,6 @@ void prepareAndWriteGridToPgmFile(int **map, options opt, int MAX) {
 	struct cluster *clusterList = (struct cluster *)arralloc(sizeof(struct cluster), 1, MAX);
 	int *rank = (int *)arralloc(sizeof(int), 1, MAX);
 	// fill rank and clusterList with default values
-	printf("-------------------------------HERE-----------------------------\n");
 	initializeClusterListAndRank(clusterList, rank, opt, MAX);
 	// update the cluster sizes
 	computeClusterSize(map, opt, clusterList);
