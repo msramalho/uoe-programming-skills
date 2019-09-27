@@ -220,11 +220,7 @@ int main(int argc, char *argv[]) {
 	}
 	printf("Writing data ...\n");
 	fprintf(fp, "P2\n");
-	if (MAX > 0) {
-		fprintf(fp, "%d %d\n%d\n", opt.size, opt.size, MAX);
-	} else {
-		fprintf(fp, "%d %d\n%d\n", opt.size, opt.size, 1);
-	}
+	fprintf(fp, "%d %d\n%d\n", opt.size, opt.size, max(MAX, 1));
 	for (int j = opt.size; j >= 1; j--) {
 		for (int i = 1; i <= opt.size; i++) {
 			colour = map[i][j];
