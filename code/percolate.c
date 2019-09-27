@@ -128,9 +128,7 @@ int main(int argc, char *argv[]) {
 	printf("rho = %f, actual density = %f\n", opt.rho, 1 - nEmpty / (double)MAX);
 
 	// make every cell converge on their cluster number
-	int loop, nchange, old;
-	loop = 1;
-	nchange = 1;
+	int loop = 1, nchange;
 	while (nchange > 0) {
 		nchange = 0;
 		for (int i = 1; i <= opt.size; i++) {
@@ -138,8 +136,7 @@ int main(int argc, char *argv[]) {
 				if (map[i][j] != FULL && !isMaxNeighbours(map, i, j)) nchange++;
 			}
 		}
-		printf("Number of changes on loop %d is %d\n", loop, nchange);
-		loop++;
+		printf("Number of changes on loop %d is %d\n", loop++, nchange);
 	}
 
 	// test if there was a percolation in the cluster
