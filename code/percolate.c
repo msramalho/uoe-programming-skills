@@ -22,7 +22,7 @@ int **generateSquareGrid(int size) {
  * @param map the 2x2 grid
  * @param opt the options struct that should have size and rho
  */
-void fillGridRandomly(int **map, options opt, int MAX) {
+void fillGridRandomly(int **map, options opt) {
 	int nEmpty = 0;
 	for (int i = 1; i <= opt.size; i++) {
 		for (int j = 1; j <= opt.size; j++) {
@@ -33,7 +33,7 @@ void fillGridRandomly(int **map, options opt, int MAX) {
 			}
 		}
 	}
-	printf("rho = %f, actual density = %f\n", opt.rho, 1 - nEmpty / (double)MAX);
+	printf("rho = %f, actual density = %f\n", opt.rho, 1 - nEmpty / (double)opt.max);
 }
 
 /**
@@ -98,8 +98,7 @@ int percolates(int **map, options opt) {
 	return 0;  // no percolation was found
 }
 
-void printPercolationStatus(int percClusetrNum){
-	
+void printPercolationStatus(int percClusetrNum) {
 	if (percClusetrNum) {
 		printf("Cluster DOES percolate. Cluster number: %d\n", percClusetrNum);
 	} else {

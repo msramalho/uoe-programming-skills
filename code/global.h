@@ -10,6 +10,7 @@ struct cluster {
 
 typedef struct {
 	int size;
+	int max;
 	int seed;
 	float rho;
 	char *dataFile;

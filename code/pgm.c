@@ -11,9 +11,9 @@
  * @param opt an options struct that should contain the map size
  * @param MAX the max number of cells in the grid
  */
-void initializeClusterListAndRank(struct cluster *clusterList, int *rank, options opt, int MAX) {
+void initializeClusterListAndRank(struct cluster *clusterList, int *rank, options opt) {
 	// initialize ranks to -1, and cluster ids with size 1
-	for (int i = 0; i < MAX; i++) {
+	for (int i = 0; i < opt.max; i++) {
 		rank[i] = -1;
 		clusterList[i].size = 0;
 		clusterList[i].id = i;
@@ -43,9 +43,9 @@ void computeClusterSize(int **map, options opt, struct cluster *clusterList) {
  * @param MAX the max number of cells in the grid
  * @return the number of clusters
  */
-int countNonEmptyClusters(struct cluster *clusterList, int MAX) {
+int countNonEmptyClusters(struct cluster *clusterList, options opt) {
 	// get the number of non-empty clusters
-	for (int nCluster = 0; nCluster < MAX; nCluster++) {
+	for (int nCluster = 0; nCluster < opt.max; nCluster++) {
 		if (clusterList[nCluster].size == 0) return nCluster;
 	}
 	return 0;
@@ -58,32 +58,32 @@ int countNonEmptyClusters(struct cluster *clusterList, int MAX) {
  * @param maxsize the size of the largest cluster
  * @param MAX the max number of cells in the grid
  */
-void printClusterInfo(int nCluster, int maxsize, int MAX) {
+void printClusterInfo(int nCluster, int maxsize, int maxValue) {
 	printf("Map has %d clusters, maximum cluster size is %d\n", nCluster, maxsize);
-	if (MAX == 1) {
+	if (maxValue == 1) {
 		printf("Displaying the largest cluster\n");
-	} else if (MAX == nCluster) {
+	} else if (maxValue == nCluster) {
 		printf("Displaying all clusters\n");
 	} else {
-		printf("Displaying the largest %d clusters\n", MAX);
+		printf("Displaying the largest %d clusters\n", maxValue);
 	}
 }
 
-void writeGridToPgmFile(int **map, options opt, int *rank, int MAX) {
+void writeGridToPgmFile(int **map, options opt, int *rank, int maxValue) {
 	printf("Opening file <%s>\n", opt.percFile);
 	FILE *fp;
 	fp = fopen(opt.percFile, "w");
 	printf("Writing data ...\n");
 	fprintf(fp, "P2\n");
-	fprintf(fp, "%d %d\n%d\n", opt.size, opt.size, max(MAX, 1));
+	fprintf(fp, "%d %d\n%d\n", opt.size, opt.size, max(maxValue, 1));
 	int colour;
 	for (int i = 1; i <= opt.size; i++) {
 		for (int j = 1; j <= opt.size; j++) {
 			colour = map[i][j];
 			if (map[i][j] > 0) {  // TODO: update to != FULL?
-				colour = min(rank[map[i][j] - 1], MAX);
+				colour = min(rank[map[i][j] - 1], maxValue);
 			} else {
-				colour = MAX;
+				colour = maxValue;
 			}
 			fprintf(fp, " %4d", colour);
 		}
@@ -114,28 +114,28 @@ void percsort(struct cluster *list, int n) {
 	qsort(list, (size_t)n, sizeof(struct cluster), clustcompare);
 }
 
-void prepareAndWriteGridToPgmFile(int **map, options opt, int MAX) {
-	struct cluster *clusterList = (struct cluster *)arralloc(sizeof(struct cluster), 1, MAX);
-	int *rank = (int *)arralloc(sizeof(int), 1, MAX);
+void prepareAndWriteGridToPgmFile(int **map, options opt) {
+	struct cluster *clusterList = (struct cluster *)arralloc(sizeof(struct cluster), 1, opt.max);
+	int *rank = (int *)arralloc(sizeof(int), 1, opt.max);
 	// fill rank and clusterList with default values
-	initializeClusterListAndRank(clusterList, rank, opt, MAX);
+	initializeClusterListAndRank(clusterList, rank, opt);
 	// update the cluster sizes
 	computeClusterSize(map, opt, clusterList);
 	// sort the clusters by decreasing size
-	percsort(clusterList, MAX);
+	percsort(clusterList, opt.max);
 	//get size of larest cluster
 	int maxsize = clusterList[0].size;
 	// count non-empty clusters
-	int nCluster = countNonEmptyClusters(clusterList, MAX);
-	MAX = min(MAX, nCluster);
+	int nCluster = countNonEmptyClusters(clusterList, opt);
+	int maxValue = min(opt.max, nCluster);
 
 	// update rank as a "hashmap" of clusterId -> clusterNumber in sorted order
 	for (int i = 0; i < nCluster; i++) rank[clusterList[i].id] = i;
 
 	// write PGM data to file
-	printClusterInfo(nCluster, maxsize, MAX);
+	printClusterInfo(nCluster, maxsize, maxValue);
 
-	writeGridToPgmFile(map, opt, rank, MAX);
+	writeGridToPgmFile(map, opt, rank, maxValue);
 
 	free(clusterList);
 	free(rank);

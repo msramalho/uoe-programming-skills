@@ -4,7 +4,7 @@
 #include "pgm.h"
 
 int **generateSquareGrid(int size);
-void fillGridRandomly(int **map, options opt, int MAX);
+void fillGridRandomly(int **map, options opt);
 bool isMaxNeighbours(int **map, int i, int j);
 int convergeOnMaxCluster(int **map, options opt);
 int percolates(int **map, options opt);

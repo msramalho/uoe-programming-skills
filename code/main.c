@@ -40,6 +40,7 @@ options loadCmdOptions(int argc, char *argv[]) {
 		}
 	}
 	printf("Parameters are rho=%f, size=%d, seed=%d, data=%s, perc=%s\n", opt.rho, opt.size, opt.seed, opt.dataFile, opt.percFile);
+	opt.max = opt.size * opt.size;
 	return opt;
 }
 
@@ -80,14 +81,14 @@ int main(int argc, char *argv[]) {
 	rinit(opt.seed);
 
 	//helpful variable
-	int MAX = opt.size * opt.size;
+	// int MAX = opt.size * opt.size;
 
 
 	// initialize the grid variable with appropriate extra rows and columns
 	int **map = generateSquareGrid(opt.size);
 
 	// Randomly fill the grid and print real vs expected density
-	fillGridRandomly(map, opt, MAX);
+	fillGridRandomly(map, opt);
 
 	// make every cell converge on their cluster number
 	convergeOnMaxCluster(map, opt);
@@ -99,7 +100,7 @@ int main(int argc, char *argv[]) {
 	writeGridToDatFile(map, opt);
 
 	// output grid to the .pgm file specified by the user
-	prepareAndWriteGridToPgmFile(map, opt, MAX);
+	prepareAndWriteGridToPgmFile(map, opt);
 
 	free(map);
 
