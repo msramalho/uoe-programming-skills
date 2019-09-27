@@ -99,6 +99,18 @@ int fillGridRandomly(int **map, options opt) {
 	return nEmpty;
 }
 
+int max(int a, int b) { return a > b ? a : b; }
+
+bool isMaxNeighbours(int **map, int i, int j) {
+	int m = max(map[i][j], map[i - 1][j]);  // up
+	m = max(m, map[i + 1][j]);              // down
+	m = max(m, map[i][j - 1]);              // left
+	m = max(m, map[i][j + 1]);              // right
+	int old = map[i][j];
+	map[i][j] = m;
+	return old == m;
+}
+
 int main(int argc, char *argv[]) {
 	options opt = loadCmdOptions(argc, argv);
 	printf("Parameters are rho=%f, size=%d, seed=%d, data=%s, perc=%s\n", opt.rho, opt.size, opt.seed, opt.dataFile, opt.percFile);
@@ -123,16 +135,7 @@ int main(int argc, char *argv[]) {
 		nchange = 0;
 		for (int i = 1; i <= opt.size; i++) {
 			for (int j = 1; j <= opt.size; j++) {
-				if (map[i][j] != FULL) {
-					old = map[i][j];
-					if (map[i - 1][j] > map[i][j]) map[i][j] = map[i - 1][j];
-					if (map[i + 1][j] > map[i][j]) map[i][j] = map[i + 1][j];
-					if (map[i][j - 1] > map[i][j]) map[i][j] = map[i][j - 1];
-					if (map[i][j + 1] > map[i][j]) map[i][j] = map[i][j + 1];
-					if (map[i][j] != old) {
-						nchange++;
-					}
-				}
+				if (map[i][j] != FULL && !isMaxNeighbours(map, i, j)) nchange++;
 			}
 		}
 		printf("Number of changes on loop %d is %d\n", loop, nchange);
