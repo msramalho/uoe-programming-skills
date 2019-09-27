@@ -74,23 +74,17 @@ int main(int argc, char *argv[]) {
 	// seed the random number generator
 	rinit(opt.seed);
 
-	// generate the grid in an empty state
+	// initialize the grid variable with appropriate extra rows and columns
 	int **map = generateSquareGrid(opt.size);
 
 	// Randomly fill the grid and print real vs expected density
-	int nEmpty = fillGridRandomly(map, opt);
-	printf("rho = %f, actual density = %f\n", opt.rho, 1 - nEmpty / (double)MAX);
+	fillGridRandomly(map, opt, MAX);
 
 	// make every cell converge on their cluster number
 	convergeOnMaxCluster(map, opt);
 
 	// test if there was a percolation in the cluster
-	int percClusetrNum = percolates(map, opt);
-	if (percClusetrNum) {
-		printf("Cluster DOES percolate. Cluster number: %d\n", percClusetrNum);
-	} else {
-		printf("Cluster DOES NOT percolate\n");
-	}
+	printPercolationStatus(percolates(map, opt));
 
 	// output grid to the .dat file specified by the user
 	writeGridToDatFile(map, opt);
