@@ -174,6 +174,7 @@ int main(int argc, char *argv[]) {
 	fclose(fp);
 	printf("File closed\n");
 
+	// generate a hashmap of cluster ID -> size
 	int ncluster, maxsize;
 	struct cluster *clustlist;
 	int colour;
