@@ -205,8 +205,8 @@ int main(int argc, char *argv[]) {
 	int colour;
 	int *rank;
 	clustlist = (struct cluster *)arralloc(sizeof(struct cluster), 1, opt.size * opt.size);
-	rank = (int *)arralloc(sizeof(int), 1, opt.size * opt.size);
-	for (int i = 0; i < opt.size * opt.size; i++) {
+	rank = (int *)arralloc(sizeof(int), 1, MAX);
+	for (int i = 0; i < MAX; i++) {
 		rank[i] = -1;
 		clustlist[i].size = 0;
 		clustlist[i].id = i + 1;
@@ -220,11 +220,11 @@ int main(int argc, char *argv[]) {
 	}
 
 	// sort the clusters by size
-	percsort(clustlist, opt.size * opt.size);
+	percsort(clustlist, MAX);
 
 	// find out how many clusters are there??
 	maxsize = clustlist[0].size;
-	for (ncluster = 0; ncluster < opt.size * opt.size && clustlist[ncluster].size > 0; ncluster++)
+	for (ncluster = 0; ncluster < MAX && clustlist[ncluster].size > 0; ncluster++)
 		;
 	if (MAX > ncluster) {
 		MAX = ncluster;
