@@ -94,7 +94,7 @@ void writeGridToPgmFile(int **map, options opt, int *rank, int maxValue) {
 	printf("File closed\n");
 }
 
-static int clustcompare(const void *p1, const void *p2) {
+static int clusterCompare(const void *p1, const void *p2) {
 	int size1, size2, id1, id2;
 
 	size1 = ((struct cluster *)p1)->size;
@@ -110,8 +110,8 @@ static int clustcompare(const void *p1, const void *p2) {
 	}
 }
 
-void percsort(struct cluster *list, int n) {
-	qsort(list, (size_t)n, sizeof(struct cluster), clustcompare);
+void percolationSort(struct cluster *list, int n) {
+	qsort(list, (size_t)n, sizeof(struct cluster), clusterCompare);
 }
 
 void prepareAndWriteGridToPgmFile(int **map, options opt) {
@@ -122,7 +122,7 @@ void prepareAndWriteGridToPgmFile(int **map, options opt) {
 	// update the cluster sizes
 	computeClusterSize(map, opt, clusterList);
 	// sort the clusters by decreasing size
-	percsort(clusterList, opt.max);
+	percolationSort(clusterList, opt.max);
 	//get size of larest cluster
 	int maxsize = clusterList[0].size;
 	// count non-empty clusters
