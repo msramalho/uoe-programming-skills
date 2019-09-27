@@ -12,9 +12,9 @@
  * @return options a struct with either the default or user-specified values, if the last are present
  */
 options loadCmdOptions(int argc, char *argv[]) {
-	options opt = {.size = 20, .seed = 1564, .rho = 0.4, .dataFile = "map.dat", .percFile = "map.pgm"};
+	options opt = {.size = 20, .seed = 1564, .rho = 0.4, .dataFile = "map.dat", .percFile = "map.pgm", .maxClusterDisplay = -1};
 	int o;
-	while ((o = getopt(argc, argv, "g:s:r:d:p:")) != -1) {
+	while ((o = getopt(argc, argv, "g:s:r:m:d:p:")) != -1) {
 		switch (o) {
 			case 'g':
 				sscanf(optarg, "%d", &opt.size);
@@ -24,6 +24,9 @@ options loadCmdOptions(int argc, char *argv[]) {
 				break;
 			case 'r':
 				sscanf(optarg, "%f", &opt.rho);
+				break;
+			case 'm':
+				sscanf(optarg, "%d", &opt.maxClusterDisplay);
 				break;
 			case 'd':
 				opt.dataFile = optarg;
@@ -39,8 +42,11 @@ options loadCmdOptions(int argc, char *argv[]) {
 				break;
 		}
 	}
-	printf("Parameters are rho=%f, size=%d, seed=%d, data=%s, perc=%s\n", opt.rho, opt.size, opt.seed, opt.dataFile, opt.percFile);
 	opt.max = opt.size * opt.size;
+	// if not user provided, assume that all clusters are to be shown
+	if (opt.maxClusterDisplay == -1) opt.maxClusterDisplay = opt.max;
+
+	printf("Parameters are rho=%f, size=%d, seed=%d, maxDisplay=%d, data=%s, perc=%s\n", opt.rho, opt.size, opt.seed, opt.maxClusterDisplay, opt.dataFile, opt.percFile);
 	return opt;
 }
 

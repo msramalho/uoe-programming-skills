@@ -11,6 +11,7 @@ struct cluster {
 typedef struct {
 	int size;
 	int max;
+	int maxClusterDisplay;
 	int seed;
 	float rho;
 	char *dataFile;
