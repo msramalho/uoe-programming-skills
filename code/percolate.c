@@ -153,7 +153,7 @@ int percolates(int **map, options opt) {
 	return 0;  // no percolation was found
 }
 
-void writeGridToDatFile(int **map, options opt){
+void writeGridToDatFile(int **map, options opt) {
 	printf("Opening file <%s>\n", opt.dataFile);
 	FILE *fp;
 	fp = fopen(opt.dataFile, "w");
@@ -201,7 +201,7 @@ int main(int argc, char *argv[]) {
 
 	// prepare the output of the PGM file
 	struct cluster *clustlist = (struct cluster *)arralloc(sizeof(struct cluster), 1, opt.size * opt.size);
-	int *rank  = (int *)arralloc(sizeof(int), 1, MAX);
+	int *rank = (int *)arralloc(sizeof(int), 1, MAX);
 
 	// initialize ranks to -1, and cluster ids with size 1
 	for (int i = 0; i < MAX; i++) {
@@ -226,10 +226,10 @@ int main(int argc, char *argv[]) {
 	// get the number of non-empty clusters
 	for (ncluster = 0; ncluster < MAX && clustlist[ncluster].size > 0; ncluster++)
 		;
-	
+
 	MAX = min(MAX, ncluster);
 
-	// update rank as a "hashmap" of clusterId -> 
+	// update rank as a "hashmap" of clusterId -> clusterNumber in sorted order
 	for (int i = 0; i < ncluster; i++) {
 		rank[clustlist[i].id] = i;
 	}
