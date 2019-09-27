@@ -10,14 +10,13 @@
 // Using macros for increased readability
 #define FULL 0
 
+typedef int bool;
+
 struct cluster {
 	int id;
 	int size;
 };
 
-typedef int bool;
-#define true 1
-#define false 0
 
 /**
  * @brief generates a square grid of given size filled with default value
@@ -128,6 +127,7 @@ int main(int argc, char *argv[]) {
 	// print real vs expected density
 	printf("rho = %f, actual density = %f\n", opt.rho, 1 - nEmpty / (double)MAX);
 
+	// make every cell converge on their cluster number
 	int loop, nchange, old;
 	loop = 1;
 	nchange = 1;
@@ -142,6 +142,7 @@ int main(int argc, char *argv[]) {
 		loop++;
 	}
 
+	// test if there was a percolation in the cluster
 	int itop, ibot, percclusternum;
 	int percs = 0;
 	percclusternum = 0;
