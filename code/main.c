@@ -39,6 +39,7 @@ options loadCmdOptions(int argc, char *argv[]) {
 				break;
 		}
 	}
+	printf("Parameters are rho=%f, size=%d, seed=%d, data=%s, perc=%s\n", opt.rho, opt.size, opt.seed, opt.dataFile, opt.percFile);
 	return opt;
 }
 
@@ -65,14 +66,22 @@ void writeGridToDatFile(int **map, options opt) {
 	printf("File closed\n");
 }
 
+/**
+ * @brief the main function of the program
+ * 
+ * @param argc the number of command line arguments
+ * @param argv command line arguments
+ * @return int exit code, 0 is normal execution
+ */
 int main(int argc, char *argv[]) {
 	options opt = loadCmdOptions(argc, argv);
-	printf("Parameters are rho=%f, size=%d, seed=%d, data=%s, perc=%s\n", opt.rho, opt.size, opt.seed, opt.dataFile, opt.percFile);
-
-	int MAX = opt.size * opt.size;
 
 	// seed the random number generator
 	rinit(opt.seed);
+
+	//helpful variable
+	int MAX = opt.size * opt.size;
+
 
 	// initialize the grid variable with appropriate extra rows and columns
 	int **map = generateSquareGrid(opt.size);
@@ -93,4 +102,6 @@ int main(int argc, char *argv[]) {
 	prepareAndWriteGridToPgmFile(map, opt, MAX);
 
 	free(map);
+
+	return 0;
 }
