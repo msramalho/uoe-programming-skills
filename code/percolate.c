@@ -15,6 +15,10 @@ struct cluster {
 	int size;
 };
 
+typedef int bool;
+#define true 1
+#define false 0
+
 /**
  * @brief generates a square grid of given size filled with default value
  * the 2 extra rows and columns are added implicitly by this function
