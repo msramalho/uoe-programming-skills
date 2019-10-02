@@ -11,6 +11,8 @@ This is done through a [Makefile](code/Makefile) which has the following main in
 * `make clean` will remove files generated but leave output of the execution
 * `make realclean` which will remove generated and output files (stronger than just `clean`)
 * `make` or  `make all` which will compile and link source code into an executable `main.out`
+* for further information call `make help`
+* variables, automatic variables, pattern rules and a self-documentation approach was used
 
 # Command line arguments
 The program should be invocated as `./main.out -x1 VALUE1 -x2 VALUE2` where `x` is the flag name of the corresponding configuration option and `VALUE` is the value to assign it. The possible flags are as follows:
