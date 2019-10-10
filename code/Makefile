@@ -3,6 +3,8 @@
 CC=gcc
 COMPILE_RULE=$(CC) -g -c $<
 
+.PHONY : help
+
 ##- all:          compiles, links and leaves only the executable main.out
 all: main.o percolate.o utils.o pgm.o uni.o arralloc.o
 	$(CC) -g $^ -lm -o main.out
@@ -26,7 +28,6 @@ clean :
 realclean: clean
 	rm -f *.dat *.pgm
 
-.PHONY : help
 ##- help:         displays helpful information
 help : Makefile
 	@sed -n 's/^##//p' $<
