@@ -14,7 +14,7 @@ def create_output_folder():
 
 
 def make_project():
-    subprocess.call(["make", "-C", "../code/"])
+    custom_subprocess(["make", "-C", "../code/"], True, "Compilation successfull")
 
 
 # ----------------------- Util functions
@@ -35,18 +35,22 @@ def read_configs(filename):
     return configs
 
 
-# ----------------------- Regression test functions
-def execute(grid=20, seed=1564, rho=0.4, max_clusters=-1, dat_file="map.dat", perc_file="map.pgm", silent=False):
-    # define the parameters to use when calling main.out
-    params = ["../code/main.out", "-g %d" % grid, "-s %d" % seed, "-r %.10f" % rho, "-m %d" % max_clusters, "-d%s" % dat_file, "-p%s" % perc_file]
-
-    # call main.out with the specified parameters
+def custom_subprocess(params, silent=False, done_message=None):
     if silent:
         with open(os.devnull, 'w') as std_null:
             return_code = subprocess.call(params, stdout=std_null, stderr=subprocess.STDOUT)
     else:
         return_code = subprocess.call(params)
-    return return_code == 0  # True for proper execution
+
+    if done_message and return_code == 0: print(done_message)
+    return return_code
+
+
+# ----------------------- Regression test functions
+def execute(grid=20, seed=1564, rho=0.4, max_clusters=-1, dat_file="map.dat", perc_file="map.pgm", silent=False):
+    # define the parameters to use when calling main.out
+    params = ["../code/main.out", "-g %d" % grid, "-s %d" % seed, "-r %.10f" % rho, "-m %d" % max_clusters, "-d%s" % dat_file, "-p%s" % perc_file]
+    return custom_subprocess(params, silent) == 0
 
 
 def execute_test(p, silent=False):
