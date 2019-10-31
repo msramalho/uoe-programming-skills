@@ -98,3 +98,6 @@ The code style used is based on Google Style Guide and its specific options are 
 
 ### 5 - Regression tests
 See [tests/README.md](tests/README.md)
+
+### 6 - Performance experiment
+See [performance/README.md](performance/README.md)
