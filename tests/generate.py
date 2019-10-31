@@ -1,5 +1,5 @@
 from main import read_file, execute_test, TMP_OUTPUT_DIR, TESTS_PATTERN, create_folder
-import json
+import json, sys
 
 create_folder(TESTS_PATTERN.split("/")[0] + "/")
 
@@ -9,7 +9,9 @@ def generate_configs():
     seed = [None, 1564, 0, 1000000, 1, 0.1]
     rho = [None, 0, 0.00001, 0.1, 0.25, 0.99999, 1]
     max_clusters = [None, -1, 0, 1, 10, 100000]
-    print("Generating a total of %d tests" % (len(grid) * len(seed) * len(rho) * len(max_clusters)))
+    number_of_tests = len(grid) * len(seed) * len(rho) * len(max_clusters)
+    print("Generating a total of %d tests" % number_of_tests)
+    yield number_of_tests
     for g in grid:
         for s in seed:
             for r in rho:
@@ -33,8 +35,11 @@ def clean_json_str(filename):
 
 
 def generate_tests():
-    for i, configs in enumerate(generate_configs()):
-        print("test %d" % i)
+    configs = generate_configs()
+    number_of_tests = next(configs)
+    for i, configs in enumerate(configs):
+        sys.stdout.write('\r' + "generating test %d/%d (%.2f%%)" % (i + 1, number_of_tests, 100*(i/float(number_of_tests - 1))))
+        sys.stdout.flush()
         dat, pgm = execute_test(configs["params"], silent=True)
         configs["dat"] = dat
         configs["pgm"] = pgm
