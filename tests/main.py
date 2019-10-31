@@ -8,9 +8,9 @@ TESTS_PATTERN = "automated/*.json"
 
 
 # ----------------------- SETUP functions
-def create_output_folder():
-    if not os.path.exists(TMP_OUTPUT_DIR):
-        os.makedirs(TMP_OUTPUT_DIR)
+def create_folder(folder=TMP_OUTPUT_DIR):
+    if not os.path.exists(folder):
+        os.makedirs(folder)
 
 
 def make_project():
@@ -49,7 +49,13 @@ def custom_subprocess(params, silent=False, done_message=None):
 # ----------------------- Regression test functions
 def execute(grid=20, seed=1564, rho=0.4, max_clusters=-1, dat_file="map.dat", perc_file="map.pgm", silent=False):
     # define the parameters to use when calling main.out
-    params = ["../code/main.out", "-g %d" % grid, "-s %d" % seed, "-r %.10f" % rho, "-m %d" % max_clusters, "-d%s" % dat_file, "-p%s" % perc_file]
+    params = ["../code/main.out"]
+    if grid != None: params.append("-g %d" % grid)
+    if seed != None: params.append("-s %d" % seed)
+    if rho != None: params.append("-r %.10f" % rho)
+    if max_clusters != None: params.append("-m %d" % max_clusters)
+    if dat_file != None: params.append("-d%s" % dat_file)
+    if perc_file != None: params.append("-p%s" % perc_file)
     return custom_subprocess(params, silent) == 0
 
 
@@ -65,7 +71,7 @@ def execute_test(p, silent=False):
 # ----------------------- RegressionTests class
 class RegressionTests(unittest.TestCase):
     def setUp(self):
-        create_output_folder()
+        create_folder()
         make_project()
 
     def test_automated(self):
