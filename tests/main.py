@@ -4,7 +4,7 @@ import unittest
 
 
 TMP_OUTPUT_DIR = "tmp_output/"
-TESTS_PATTERN = "expected/*.json"
+TESTS_PATTERN = "automated/*.json"
 
 
 # ----------------------- SETUP functions
@@ -68,11 +68,11 @@ class RegressionTests(unittest.TestCase):
         create_output_folder()
         make_project()
 
-    def test_regression(self):
+    def test_automated(self):
         # execute all the .json files in the expected folder
         for i, filename in enumerate(glob(TESTS_PATTERN)):
             configs = read_configs(filename)
-            print("Regression test %2d (%s)..." % (i + 1, configs["description"])),
+            print("Regression test %2d <%s>..." % (i + 1, configs["description"])),
             # run and get results
             dat, pgm = execute_test(configs["params"], silent=True)
             # assert the correctness of the results
@@ -81,6 +81,7 @@ class RegressionTests(unittest.TestCase):
             print("Done")
 
     def tearDown(self):
+        # TODO: remove pass when done
         # shutil.rmtree(TMP_OUTPUT_DIR)
         pass
 
