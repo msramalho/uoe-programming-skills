@@ -12,6 +12,8 @@ def create_folder(folder=TMP_OUTPUT_DIR):
     if not os.path.exists(folder):
         os.makedirs(folder)
 
+def remove_folder(folder=TMP_OUTPUT_DIR):
+    shutil.rmtree(folder)
 
 def make_project():
     custom_subprocess(["make", "-C", "../code/"], True, "Compilation successfull")
@@ -87,9 +89,7 @@ class RegressionTests(unittest.TestCase):
             print("Done")
 
     def tearDown(self):
-        # TODO: remove pass when done
-        # shutil.rmtree(TMP_OUTPUT_DIR)
-        pass
+        remove_folder()
 
 
 # ----------------------- main driver code
