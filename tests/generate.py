@@ -1,18 +1,21 @@
-from main import read_file, execute_test, TMP_OUTPUT_DIR
+from main import read_file, execute_test, TMP_OUTPUT_DIR, TESTS_PATTERN, create_folder
 import json
 
+create_folder(TESTS_PATTERN.split("/")[0] + "/")
+
+
 def generate_configs():
-    grid = [0, 1, 2, 5, 10, 15, 25, 50, 100]
-    seed = [1564, 0, 1000000, 1, 0.1, 1.5]
-    rho = [0, 0.00001, 0.1, 0.25, 0.5, 0.99999, 1]
-    max_clusters = [-1, 0, 1, 10, 100000]
+    grid = [None, 0, 1, 5, 10, 15, 25, 50, 100]
+    seed = [None, 1564, 0, 1000000, 1, 0.1]
+    rho = [None, 0, 0.00001, 0.1, 0.25, 0.99999, 1]
+    max_clusters = [None, -1, 0, 1, 10, 100000]
     print("Generating a total of %d tests" % (len(grid) * len(seed) * len(rho) * len(max_clusters)))
     for g in grid:
         for s in seed:
             for r in rho:
                 for m in max_clusters:
                     yield {
-                        "description": "(g=%d, s=%d, r=%.4f, m=%d)" % (g, s, r, m),
+                        "description": "(g=%s, s=%s, r=%s, m=%s)" % (g, s, r, m),
                         "params": {
                             "grid": g,
                             "seed": s,
@@ -23,9 +26,11 @@ def generate_configs():
                         }
                     }
 
+
 def clean_json_str(filename):
     v = read_file("1.tmp").strip()
     return v[1:-1]
+
 
 def generate_tests():
     for i, configs in enumerate(generate_configs()):
@@ -38,6 +43,7 @@ def generate_tests():
         p["perc_file"] = p["perc_file"].split("/")[-1]
         with open("automated/%02d.json" % i, "w") as out:
             out.write(json.dumps(configs, indent=4))
+
 
 if __name__ == '__main__':
     generate_tests()
