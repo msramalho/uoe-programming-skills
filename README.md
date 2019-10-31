@@ -94,3 +94,7 @@ To complement the above definition of all the available command line arguments a
 
 ### 4 - Code style
 The code style used is based on Google Style Guide and its specific options are available in the [settings.json](.vscode/settings.json) file. Although this is an IDE-specific file it was used during development and contains enough information for these settings to be applied in other IDEs, hence it being included in the project delivery. 
+
+
+### 5 - Regression tests
+See [tests/README.md](tests/README.md)
