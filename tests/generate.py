@@ -1,7 +1,6 @@
-from main import read_file, execute_test, TMP_OUTPUT_DIR, TESTS_PATTERN, create_folder
+from main import read_file, execute_test, TMP_OUTPUT_DIR, TESTS_PATTERN, create_folder, remove_folder
 import json, sys
 
-create_folder(TESTS_PATTERN.split("/")[0] + "/")
 
 
 def generate_configs():
@@ -36,7 +35,7 @@ def clean_json_str(filename):
 
 def generate_tests():
     configs = generate_configs()
-    number_of_tests = next(configs)
+    number_of_tests = next(configs) # the first value is the number of configs
     for i, configs in enumerate(configs):
         sys.stdout.write('\r' + "generating test %d/%d (%.2f%%)" % (i + 1, number_of_tests, 100*(i/float(number_of_tests - 1))))
         sys.stdout.flush()
@@ -48,7 +47,14 @@ def generate_tests():
         p["perc_file"] = p["perc_file"].split("/")[-1]
         with open("automated/%02d.json" % i, "w") as out:
             out.write(json.dumps(configs, indent=4))
+    print()
 
 
 if __name__ == '__main__':
+    # create folders
+    create_folder()
+    create_folder(TESTS_PATTERN.split("/")[0] + "/")
+    # generate regression tests
     generate_tests()
+    # remove tmp folder
+    remove_folder()
