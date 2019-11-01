@@ -12,4 +12,4 @@ def custom_subprocess(params, silent=False, done_message=None):
 
 
 def make_project(silent=True):
-    custom_subprocess(["make", "-C", "../code/"], "Compilation successfull")
+    custom_subprocess(["make", "-C", "../code/"], silent, "Compilation successfull")
