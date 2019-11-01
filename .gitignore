@@ -6,6 +6,7 @@
 *.pyc
 *.dat
 *.pgm
+.ipynb_checkpoints
 
 # course files
 instructions.pdf
