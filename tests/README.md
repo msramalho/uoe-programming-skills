@@ -1,7 +1,7 @@
 # Regression Tests
 I've opted by implementing a regression test approach over a unit testing one.
 
-Tis is a rather dynamic implementation that works as follows:
+This is a rather dynamic implementation that works as follows:
  1. assuming the current implementation is working as expected (as is the requirement when a regression-tests approach is chosen)
  2. generating regression tests dynamically using `python generate.py`, which works as follows:
       * create a folder to hold the _JSON_ files that describe the regression tests
