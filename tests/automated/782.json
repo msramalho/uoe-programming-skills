@@ -1,0 +1,13 @@
+{
+    "dat": "   14   14   14   14    0\n   14   14    0   14   14\n   14   14   14   14    0\n    0   14   14    0   17\n    0    0    0   17   17\n", 
+    "pgm": "P2\n5 5\n1\n    0    0    0    0    0\n    0    0    0    0    0\n    0    0    0    0    0\n    0    0    0    0    0\n    0    0    0    0    0\n", 
+    "params": {
+        "grid": 5, 
+        "seed": null, 
+        "dat_file": "map.dat", 
+        "rho": 0.25, 
+        "max_clusters": 0, 
+        "perc_file": "map.pgm"
+    }, 
+    "description": "(g=5, s=None, r=0.25, m=0)"
+}

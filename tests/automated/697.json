@@ -1,0 +1,13 @@
+{
+    "dat": "    1\n", 
+    "pgm": "P2\n1 1\n1\n   -1\n", 
+    "params": {
+        "grid": 1, 
+        "seed": 1, 
+        "dat_file": "map.dat", 
+        "rho": 0.25, 
+        "max_clusters": -1, 
+        "perc_file": "map.pgm"
+    }, 
+    "description": "(g=1, s=1, r=0.25, m=-1)"
+}
