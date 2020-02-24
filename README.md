@@ -1,3 +1,7 @@
+
+![image](https://user-images.githubusercontent.com/19508417/75169448-7ca54f80-5720-11ea-8e8b-187ed147e48c.png)
+
+
 # Code structure
  * [global.h](code/global.h) contains global macros, global `#defines` and global structs that are used by the other files
  * [main.c](code/main.c) and [main.h](code/main.h) contain the driver code, cmd line arguments parsing and any other small and isolated application-specific functions 
