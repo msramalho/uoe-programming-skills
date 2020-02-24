@@ -2,7 +2,9 @@
   UOE Programming Skills
 </h1>
 
-Going back to the basics @ University of Edinburgh. [Refactoring](https://github.com/msramalho/uoe-programming-skills-coursework/tree/master/code), [regression testing](https://github.com/msramalho/uoe-programming-skills-coursework/tree/master/tests), [performance evaluation](https://github.com/msramalho/uoe-programming-skills-coursework/blob/master/performance/performance_report.ipynb),... 
+Going back to the basics @ University of Edinburgh. 
+
+[Refactoring](https://github.com/msramalho/uoe-programming-skills-coursework/tree/master/code), [regression testing](https://github.com/msramalho/uoe-programming-skills-coursework/tree/master/tests), [performance evaluation](https://github.com/msramalho/uoe-programming-skills-coursework/blob/master/performance/performance_report.ipynb),... 
 
 Refactoring in C. Tests and performance in python. 
 
